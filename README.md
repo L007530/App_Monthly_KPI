@@ -1,1 +1,22 @@
 # App_Monthly_KPI
+
+    "iDoctor",
+    "iDoctor_rep",
+    "iNurse",
+    "LCCP",
+    "iPatient",
+    "MLWechat",
+    "RAPID",
+    "Smart Sales Tool_SSR",
+    "Smart Sales Tool_SDF",
+    "Coterie",
+    "eOrdering",
+    "WeChatEnt",
+    "AcronymBot",
+    "Chatbot",
+    "CHIEF",
+    "CHIEF Cloud",
+    "LillyChina",
+    "LillyMedical",
+    "Training Gamification",
+    "BAW"
