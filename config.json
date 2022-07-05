@@ -1,0 +1,511 @@
+{
+  "request date": "202206",
+  "xlsx sd": "China_apps_KPI_dashboard 2022 May.xlsx",
+  "apps to run": [
+    "iDoctor",
+    "iDoctor_rep",
+    "iNurse",
+    "LCCP",
+    "iPatient",
+    "MLWechat",
+    "RAPID",
+    "Smart Sales Tool_SSR",
+    "Smart Sales Tool_SDF",
+    "Coterie",
+    "eOrdering",
+    "WeChatEnt",
+    "AcronymBot",
+    "Chatbot",
+    "CHIEF",
+    "CHIEF Cloud",
+    "LillyChina",
+    "LillyMedical",
+    "Training Gamification",
+    "BAW"
+  ],
+  "=====================================DO NOT CHANGE CONFIG BELOW": "==============================================",
+  "applications": [
+    "iDoctor",
+    "iDoctor_rep",
+    "iNurse",
+    "LCCP",
+    "iPatient",
+    "MLWechat",
+    "RAPID",
+    "Smart Sales Tool_SSR",
+    "Smart Sales Tool_SDF",
+    "Coterie",
+    "eOrdering",
+    "WeChatEnt",
+    "AcronymBot",
+    "Chatbot",
+    "CHIEF",
+    "CHIEF Cloud",
+    "LillyChina",
+    "LillyMedical",
+    "Training Gamification",
+    "BAW"
+  ],
+  "app setting": {
+    "CHIEF": {
+      "class": "Chief",
+      "sd type": "xlsx",
+      "displayName": "CHIEF",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Total Forms",
+        "Total Submit records",
+        "Total Approval records"
+      ],
+      "MTD": [
+        "Forms",
+        "Submit records",
+        "Approval records"
+      ],
+      "UTD": [
+      ],
+      "keyData": [
+        "Submit records"
+      ],
+      "launchFrom": ""
+    },
+    "CHIEF Cloud": {
+      "class": "ChiefCloud",
+      "sd type": "xlsx",
+      "displayName": "Chief Cloud",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Total Forms",
+        "Total Submit records",
+        "Total Approval records"
+      ],
+      "MTD": [
+        "Forms",
+        "Submit records",
+        "Approval records"
+      ],
+      "UTD": [
+        "Total Forms",
+        "Total Submit records",
+        "Total Approval records"
+      ],
+      "keyData": [
+        "Submit records"
+      ],
+      "launchFrom": "Apr 2018"
+    },
+    "LCCP": {
+      "class": "LCCP",
+      "sd type": "xlsx",
+      "displayName": "LCCP System",
+      "TA": "Lilly Sales Reps, HCPs, Patients",
+      "YTD": [
+        "New HCP enrollment",
+        "New Patient enrollment",
+        "Patient testing record"
+      ],
+      "MTD": [
+        "New HCP enrollment",
+        "New Patient enrollment",
+        "Patient testing record"
+      ],
+      "UTD": [
+        "Total HCP enrollment",
+        "Total Patient enrollment",
+        "Total Patient testing record"
+      ],
+      "keyData": [
+        "Patient testing record"
+      ],
+      "launchFrom": "Apr 2017"
+    },
+    "iNurse": {
+      "class": "INurse",
+      "sd type": "xlsx",
+      "displayName": "iNurse Wechat",
+      "TA": "Nurses",
+      "YTD": [
+        "Subscribed users",
+        "Touchpoint",
+        "Enrollment Patients"
+      ],
+      "MTD": [
+        "Subscribed users",
+        "Active users",
+        "Touchpoint",
+        "Enrollment Patients"
+      ],
+      "UTD": [
+        "Subscribed users",
+        "Touchpoint",
+        "Enrollment Patients"
+      ],
+      "keyData": [
+        "Touchpoint"
+      ],
+      "launchFrom": "Nov 2017"
+    },
+    "iPharmasit": {
+      "class": "IPharmasit",
+      "sd type": "xlsx"
+    },
+    "iDoctor": {
+      "class": "IDoctor",
+      "sd type": "xlsx",
+      "displayName": "iDoctor Wechat",
+      "TA": "HCPs",
+      "YTD": [
+        "Subscribed users",
+        "Touchpoint",
+        "Active users"
+      ],
+      "MTD": [
+        "Subscribed users",
+        "Touchpoint",
+        "Active users"
+      ],
+      "UTD": [
+        "Subscribed users",
+        "Touchpoint",
+        "Active users"
+      ],
+      "keyData": [
+        "Touchpoint"
+      ],
+      "launchFrom": "Jan 2017"
+    },
+    "iDoctor_rep": {
+      "class": "IDoctor_rep",
+      "sd type": "xlsx",
+      "displayName": "Wechat Rep",
+      "TA": "Lilly Sales Reps, HCP",
+      "YTD": [
+        "HCP Touchpoint",
+        "Rep Touchpoint",
+        "Active users"
+      ],
+      "MTD": [
+        "HCP Touchpoint",
+        "Rep Touchpoint",
+        "Active users"
+      ],
+      "UTD": [
+        "HCP Touchpoint",
+        "Rep Touchpoint",
+        "Active users"
+      ],
+      "keyData": [
+        "Rep Touchpoint"
+      ],
+      "launchFrom": "Jan 2019"
+    },
+    "iPatient": {
+      "class": "IPatient",
+      "sd type": "xlsx",
+      "displayName": "iPatient",
+      "TA": "Patients",
+      "YTD": [
+        "Subscribed users",
+        "Touchpoint"
+      ],
+      "MTD": [
+        "Subscribed users",
+        "Touchpoint",
+        "Active users",
+        "TP/Active user"
+      ],
+      "UTD": [
+        "Total Subscribed users",
+        "Touchpoint"
+      ],
+      "keyData": [
+        "Touchpoint"
+      ],
+      "launchFrom": "Apr 2018"
+    },
+    "MLWechat": {
+      "class": "MLWechat",
+      "sd type": "db",
+      "cred_index": "cred1",
+      "displayName": "eMSL (ML Wechat)",
+      "TA": "Lilly internal MSLs",
+      "YTD": [
+        "Content covered SE number",
+        "Content update number",
+        "Touchpoint"
+      ],
+      "MTD": [
+        "Content covered SE number",
+        "Content update number",
+        "Touchpoint"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Content covered SE number"
+      ],
+      "launchFrom": ""
+    },
+    "RAPID": {
+      "class": "RAPID",
+      "sd type": "xlsx",
+      "displayName": "RAPID",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Total Report number",
+        "Access Number",
+        "Active users"
+      ],
+      "MTD": [
+        "Total Report number",
+        "Access Number",
+        "Active users"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Access Number"
+      ],
+      "launchFrom": ""
+    },
+    "Smart Sales Tool_SSR": {
+      "class": "SmartSalesToolSSR",
+      "sd type": "db",
+      "displayName": "Smart Sales Tool SSR Module",
+      "TA": "Lilly Sales Reps, DMs",
+      "YTD": [
+        "Access Number",
+        "Active Users"
+      ],
+      "MTD": [
+        "Access Number",
+        "Active Users"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Access Number"
+      ],
+      "launchFrom": ""
+    },
+    "Smart Sales Tool_SDF": {
+      "class": "SmartSalesToolSDF",
+      "sd type": "db",
+      "displayName": "Smart Sales Tool SDF Module",
+      "TA": "Lilly Sales Reps, DMs",
+      "YTD": [
+        "Access Number",
+        "Active Users"
+      ],
+      "MTD": [
+        "Access Number",
+        "Active Users"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Access Number"
+      ],
+      "launchFrom": ""
+    },
+    "Coterie": {
+      "class": "Coterie",
+      "sd type": "xlsx",
+      "displayName": "COTERIE",
+      "TA": "FIN, Commercial, MKT, Vendors",
+      "YTD": [
+        "Total Vendor number",
+        "Payment number",
+        "Active users"
+      ],
+      "MTD": [
+        "Total Vendor number",
+        "Payment number",
+        "Active users"
+      ],
+      "UTD": [
+        "Total Vendor number",
+        "Payment number",
+        "Active users"
+      ],
+      "keyData": [
+        "Payment number"
+      ],
+      "launchFrom": "Jul 2018"
+    },
+    "eOrdering": {
+      "class": "EOrdering",
+      "sd type": "db",
+      "cred_index": "cred1",
+      "displayName": "eOrdering",
+      "TA": "Commercial, Vendors",
+      "YTD": [
+        "Total vendor number",
+        "Orders number"
+      ],
+      "MTD": [
+        "Total vendor number",
+        "Orders number"
+      ],
+      "UTD": [
+        "Total vendor number",
+        "Orders number"
+      ],
+      "keyData": [
+        "Orders number"
+      ],
+      "launchFrom": "Jul 2018"
+    },
+    "WeChatEnt": {
+      "class": "WeChatEnt",
+      "sd type": "db",
+      "cred_index": "cred1",
+      "displayName": "WeChat Ent",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Total Channels",
+        "Channels Access Number",
+        "Active users"
+      ],
+      "MTD": [
+        "Channels",
+        "Channels Access Number",
+        "Active users"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Channels Access Number"
+      ],
+      "launchFrom": ""
+    },
+    "AcronymBot": {
+      "class": "AcronymBot",
+      "sd type": "xlsx",
+      "displayName": "Acronym Bot",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Total Number Searches",
+        "Total Number Users",
+        "Total Success Rate"
+      ],
+      "MTD": [
+        "Total Number Searches",
+        "Total Number Users",
+        "Total Success Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Total Success Rate"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot": {
+      "class": "Chatbot",
+      "sd type": "xlsx",
+      "displayName": "Chatbot",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Accuracy (Only Count in Scope)"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Accuracy (Only Count in Scope)"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "China Corporate Website": {
+      "class": "ChinaCorporateWebsite",
+      "sd type": "xlsx"
+    },
+    "LillyMedical": {
+      "class": "LillyMedical",
+      "sd type": "xlsx",
+      "displayName": "Lillymedical site",
+      "TA": "HCPs",
+      "YTD": [
+        "Total page visit",
+        "FAQ page visit"
+      ],
+      "MTD": [
+        "Total page visit",
+        "FAQ page visit"
+      ],
+      "UTD": [
+        "Total page visit",
+        "FAQ page visit"
+      ],
+      "keyData": [
+        "Total page visit"
+      ],
+      "launchFrom": "Mar 2020"
+    },
+    "Training Gamification": {
+      "class": "TrainingGamification",
+      "sd type": "db",
+      "cred_index": "cred1",
+      "displayName": "Sales Force Training Gamification",
+      "TA": "Lilly Sales Reps, DMs",
+      "YTD": [
+        "Total User Number",
+        "Total Access Number",
+        "Sign in Number"
+      ],
+      "MTD": [
+        "Total User Number",
+        "Total Access Number",
+        "Sign in Number"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Access number"
+      ],
+      "launchFrom": ""
+    },
+    "LillyChina": {
+      "class": "LillyChina",
+      "sd type": "api",
+      "displayName": "LillyChina Site",
+      "TA": "Public",
+      "YTD": [
+        "Session",
+        "Touchpoint",
+        "Active users"
+      ],
+      "MTD": [
+        "Session",
+        "Touchpoint",
+        "Active users"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Session"
+      ],
+      "launchFrom": ""
+    },
+    "BAW": {
+      "class": "BAW",
+      "sd type": "xlsx",
+      "displayName": "BAW",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Total Forms",
+        "Total Finished forms",
+        "Total On-going forms"
+      ],
+      "MTD": [
+        "Forms",
+        "Finished forms",
+        "On-going forms"
+      ],
+      "UTD": [
+      ],
+      "keyData": [
+        "On-going forms"
+      ],
+      "launchFrom": ""
+    }
+  }
+}
