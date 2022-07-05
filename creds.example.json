@@ -1,0 +1,10 @@
+{
+  "cred1": {
+    "UID": "DB_username",
+    "pwd": "PASSWORD"
+  },
+  "cred2": {
+    "UID": "Cxxxxxx",
+    "pwd": "xxxxxx"
+  }
+}
