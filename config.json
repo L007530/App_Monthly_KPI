@@ -1,27 +1,10 @@
 {
-  "request date": "202206",
-  "xlsx sd": "China_apps_KPI_dashboard 2022 May.xlsx",
+  "request date": "202207",
+  "xlsx sd": "China_apps_KPI_dashboard 2022 Jul.xlsx",
   "apps to run": [
-    "iDoctor",
-    "iDoctor_rep",
-    "iNurse",
-    "LCCP",
-    "iPatient",
-    "MLWechat",
-    "RAPID",
-    "Smart Sales Tool_SSR",
-    "Smart Sales Tool_SDF",
-    "Coterie",
-    "eOrdering",
-    "WeChatEnt",
-    "AcronymBot",
-    "Chatbot",
-    "CHIEF",
-    "CHIEF Cloud",
-    "LillyChina",
-    "LillyMedical",
-    "Training Gamification",
-    "BAW"
+    "Chatbot_HR",
+    "Chatbot_HCP",
+    "LCCP"
   ],
   "=====================================DO NOT CHANGE CONFIG BELOW": "==============================================",
   "applications": [
@@ -38,7 +21,8 @@
     "eOrdering",
     "WeChatEnt",
     "AcronymBot",
-    "Chatbot",
+    "Chatbot_HR",
+    "Chatbot_HCP",
     "CHIEF",
     "CHIEF Cloud",
     "LillyChina",
@@ -395,10 +379,31 @@
       ],
       "launchFrom": ""
     },
-    "Chatbot": {
-      "class": "Chatbot",
+    "Chatbot_HR": {
+      "class": "Chatbot_HR",
       "sd type": "xlsx",
-      "displayName": "Chatbot",
+      "displayName": "Chatbot HR",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Accuracy (Only Count in Scope)"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Accuracy (Only Count in Scope)"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot_HCP": {
+      "class": "Chatbot_HCP",
+      "sd type": "xlsx",
+      "displayName": "Chatbot HCP",
       "TA": "Lilly Employee",
       "YTD": [
         "Active User",

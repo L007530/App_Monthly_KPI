@@ -60,13 +60,13 @@ if __name__ == '__main__':
         if app not in apps_to_run:
             continue
         app_setting = config["app setting"][app]
-        print(app_setting)
+        # print(app_setting)
         app_cls = factory(app_setting["class"])
         sd_type = app_setting["sd type"]
         cred_index = ''
         if 'cred_index' in app_setting:
             cred_index = app_setting["cred_index"]
-            print(cred_index)
+            # print(cred_index)
         keyDataName = app_setting["keyData"]
         instance = app_cls(request_date, cred_index=cred_index)
 
@@ -132,7 +132,10 @@ if __name__ == '__main__':
             if request_date[-2:] == '01':
                 trend_header_text = f'{instance.last_month_of(request_date)[0:4]}/{instance.last_month_of(request_date)[-2:]} - {request_date[0:4]}/{request_date[-2:]}</br>{keyDataName[0]} Trend '
             else:
-                trend_header_text = f'{instance.last_month_of(request_date)[0:4]}/01 - {request_date[0:4]}/{request_date[-2:]}</br>{keyDataName[0]} Trend '
+                key_data_len = len(list(filter(lambda d: d[0][0:4] == request_date[0:4], key_data)))
+                print(f"{key_data_len}")
+                trend_header_text = f'{instance.last_month_of(request_date)[0:4]}/{int(request_date[-2:]) - key_data_len + 1} - {request_date[0:4]}/{request_date[-2:]}</br>{keyDataName[0]} Trend '
+                # trend_header_text = f'{instance.last_month_of(request_date)[0:4]}/01 - {request_date[0:4]}/{request_date[-2:]}</br>{keyDataName[0]} Trend '
             trend_header = HTMLTable.TableCell(instance.to_div(trend_header_text, is_header=True),
                                                attribs={'bgcolor': '9CC2E5', 'rowspan': 2})
             app_data = HTMLTable.TableCell(instance.to_div(f'{appDisplayName}'))

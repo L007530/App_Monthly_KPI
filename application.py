@@ -132,6 +132,8 @@ class Application:
                 y = [e[1] for e in key_source_data if
                      datetime.strptime(e[0], "%Y%m") == datetime.strptime(last_month, "%Y%m") or
                      datetime.strptime(e[0], "%Y%m") == datetime.strptime(self.request_date, "%Y%m")]
+                if x != y:
+                    x = x[:len(y)]
                 plt.plot(x, y, linestyle='-', marker='o', ms=30, mfc='r', mec='r', linewidth=6)
                 plt.axis('off')
                 figure = plt.gcf()
@@ -149,7 +151,12 @@ class Application:
                      datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date, "%Y%m") and
                      datetime.strptime(e[0], "%Y%m").year == datetime.strptime(self.request_date,
                                                                                "%Y%m").year]
+
                 x = [i for i in range(1, int(datetime.strptime(self.request_date, "%Y%m").month) + 1)]
+                if x != y:
+                    x = x[:len(y)]
+                # print(f'y={len(y)}')
+                # print(f'x={len(x)}')
                 plt.plot(x, y, linestyle='-', marker='o', ms=25, mfc='r', mec='r', linewidth=6)
                 plt.axis('off')
                 figure = plt.gcf()
@@ -529,11 +536,11 @@ class RAPID(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
-class Chatbot(Application):
+class Chatbot_HR(Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
-        self.app = "Chatbot"
+        self.app = "Chatbot_HR"
 
     # def load_source_file(self, source_file):
     #     if source_file is None:
@@ -548,6 +555,42 @@ class Chatbot(Application):
     #     except Exception as e:
     #         print(str(e))
     #         return None
+
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        request_ytd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
+        request_mtd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
+
+        request_ytd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Conversation Number(YTD)"]))[0][1]
+        request_mtd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
+
+        request_ytd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
+        request_mtd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
+
+        YTD_data = [self.number_with_comma(request_ytd_Active_User),
+                    self.number_with_comma(request_ytd_Conversation_Number),
+                    f'{request_ytd_Accuracy * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Active_User),
+                    self.number_with_comma(request_mtd_Conversation_Number),
+                    f'{request_mtd_Accuracy * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class Chatbot_HCP(Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_HCP"
 
     def html_table_data(self, source_data):
         if source_data is None:
@@ -765,7 +808,7 @@ class AcronymBot(Application):
     #     try:
     #         df = pd.read_excel(source_file, sheet_name=self.app, header=0, index_col=0)
     #         source_date = {
-    #             k: sorted([(str(p), q) for p, q in v.items()], key=lambda ele: datetime.strptime((ele[0]), '%Y%m'),
+    #             k: sorted([(CHIEF Cloudstr(p), q) for p, q in v.items()], key=lambda ele: datetime.strptime((ele[0]), '%Y%m'),
     #                       reverse=False)
     #             for k, v in df.to_dict().items()}
     #         return source_date
@@ -886,7 +929,7 @@ class Chief(Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
-        self.app = "Chief"
+        self.app = "CHIEF"
 
     def html_table_data(self, source_data):
         if source_data is None:
@@ -926,7 +969,7 @@ class ChiefCloud(Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
-        self.app = "Chief Cloud"
+        self.app = "CHIEF Cloud"
 
     def html_table_data(self, source_data):
         if source_data is None:
