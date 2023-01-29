@@ -1,14 +1,14 @@
-from datetime import datetime, date
-import json
-from pprint import pprint
 import argparse
-# import io
-# import sys
-
-# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
+import json
+import os
+import sys
+from pprint import pprint
 
 import HTMLTable
 from application import Application
+
+
+# sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 
 
 def factory(classname):
@@ -83,6 +83,7 @@ if __name__ == '__main__':
             elif sd_type == "xlsx":
                 source_file = instance.find_file(xlsx_file, 'sourceData')
                 source_data = instance.load_source_file(source_file)
+            print(f"[{app}] Before to html")
             pprint(source_data)
 
             if source_data is None:
@@ -189,7 +190,12 @@ if __name__ == '__main__':
 
             task_summary['success'].append(app)
         except Exception as e:
-            print(f"[ERROR] [{app}]: str{e}\nSkipping [{app}] and go to next application...")
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            print(
+                f"[ERROR] [{app}]: {e} on {fname} {exc_tb.tb_lineno}"
+                f"\nSkipping [{app}] and go to next application... "
+            )
             task_summary['failed'].append(app)
             continue
         else:

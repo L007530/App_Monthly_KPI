@@ -1,4 +1,5 @@
 import json
+import sys
 import os
 from datetime import datetime, date
 from collections import defaultdict
@@ -112,8 +113,8 @@ class Application:
     def create_dir_if_not_exist(path):
         if not os.path.exists(path):
             os.makedirs(path)
-        elif os.path.exists(path):
-            print(f'Existed {path}, did nothing')
+        # elif os.path.exists(path):
+        #     print(f'Existed {path}, did nothing')
 
     def get_key_data(self, source_data, key_name):
         if source_data is None:
@@ -197,6 +198,9 @@ class Application:
             creds = json.load(f)
         cred = creds[cred_index]
         return cred
+
+    def print_error(self, error_msg, fname, exc_tb_line):
+        print(f"[ERROR] [{self.app}]: {error_msg} on {fname} {exc_tb_line}", file=sys.stderr)
 
 
 class EOrdering(Application):
@@ -622,8 +626,187 @@ class Chatbot_HCP(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
-class WeChatEnt(Application):
+class Chatbot_MOE(Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_MOE"
 
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        request_ytd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
+        request_mtd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
+
+        request_ytd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Conversation Number(YTD)"]))[0][1]
+        request_mtd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
+
+        request_ytd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
+        request_mtd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
+
+        YTD_data = [self.number_with_comma(request_ytd_Active_User),
+                    self.number_with_comma(request_ytd_Conversation_Number),
+                    f'{request_ytd_Accuracy * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Active_User),
+                    self.number_with_comma(request_mtd_Conversation_Number),
+                    f'{request_mtd_Accuracy * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class Chatbot_SFE(Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_SFE"
+
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        request_ytd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
+        request_mtd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
+
+        request_ytd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Conversation Number(YTD)"]))[0][1]
+        request_mtd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
+
+        request_ytd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
+        request_mtd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
+
+        YTD_data = [self.number_with_comma(request_ytd_Active_User),
+                    self.number_with_comma(request_ytd_Conversation_Number),
+                    f'{request_ytd_Accuracy * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Active_User),
+                    self.number_with_comma(request_mtd_Conversation_Number),
+                    f'{request_mtd_Accuracy * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class Chatbot_LISHAN(Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_LISHAN"
+
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        request_ytd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
+        request_mtd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
+
+        request_ytd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Conversation Number(YTD)"]))[0][1]
+        request_mtd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
+
+        request_ytd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
+        request_mtd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
+
+        YTD_data = [self.number_with_comma(request_ytd_Active_User),
+                    self.number_with_comma(request_ytd_Conversation_Number),
+                    f'{request_ytd_Accuracy * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Active_User),
+                    self.number_with_comma(request_mtd_Conversation_Number),
+                    f'{request_mtd_Accuracy * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class Chatbot_FINANCE(Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_FINANCE"
+
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        request_ytd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
+        request_mtd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
+
+        request_ytd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Conversation Number(YTD)"]))[0][1]
+        request_mtd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
+
+        request_ytd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
+        request_mtd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
+
+        YTD_data = [self.number_with_comma(request_ytd_Active_User),
+                    self.number_with_comma(request_ytd_Conversation_Number),
+                    f'{request_ytd_Accuracy * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Active_User),
+                    self.number_with_comma(request_mtd_Conversation_Number),
+                    f'{request_mtd_Accuracy * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class Chatbot_LCCP(Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_LCCP"
+
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        request_ytd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
+        request_mtd_Active_User = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
+
+        request_ytd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Conversation Number(YTD)"]))[0][1]
+        request_mtd_Conversation_Number = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
+
+        request_ytd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date,
+                        source_data["Satisfaction (Only Count in Scope)(YTD)"]))[0][1]
+        request_mtd_Accuracy = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Satisfaction (Only Count in Scope)"]))[0][1]
+
+        YTD_data = [self.number_with_comma(request_ytd_Active_User),
+                    self.number_with_comma(request_ytd_Conversation_Number),
+                    f'{request_ytd_Accuracy * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Active_User),
+                    self.number_with_comma(request_mtd_Conversation_Number),
+                    f'{request_mtd_Accuracy * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class WeChatEnt(Application):
     def __init__(self, request_date, cred_index='cred1'):
         super().__init__(request_date)
         self.cred_index = cred_index
@@ -734,6 +917,48 @@ class WeChatEnt(Application):
                     self.number_with_comma(request_mtd_Active_users)]
 
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class WeChatEnt_xlsx(WeChatEnt, Application):
+    def __init__(self, request_date, cred_index='', app=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "WeChatEnt"
+
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        try:
+            request_ytd_Active_users = \
+                list(filter(lambda e: e[0] == self.request_date, source_data["Active users (year)"]))[0][1]
+            request_mtd_Active_users = \
+                list(filter(lambda e: e[0] == self.request_date, source_data["Active users"]))[0][1]
+
+            request_mtd_Channels = \
+                list(filter(lambda e: e[0] == self.request_date, source_data["Channels"]))[0][1]
+            request_ytd_Channels = request_mtd_Channels
+
+            request_ytd_Channels_Access_Number = [e[1] for e in source_data["Channels Access Number"] if
+                                                  datetime.strptime(e[0], "%Y%m") <= datetime.strptime(
+                                                      self.request_date,
+                                                      "%Y%m") and
+                                                  datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+                                                      self.request_date,
+                                                      "%Y%m").year]
+
+            YTD_data = [self.number_with_comma(request_ytd_Channels),
+                        self.number_with_comma(sum(request_ytd_Channels_Access_Number)),
+                        self.number_with_comma(request_ytd_Active_users)]
+            MTD_data = [self.number_with_comma(request_mtd_Channels),
+                        self.number_with_comma(request_ytd_Channels_Access_Number[-1]),
+                        self.number_with_comma(request_mtd_Active_users)]
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            Application.print_error(self, error_msg=e, fname=fname, exc_tb_line=exc_tb.tb_lineno)
+            return None
+        else:
+            return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
 class Coterie(Application):
