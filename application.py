@@ -5,9 +5,7 @@ from datetime import datetime, date
 from collections import defaultdict
 
 import pathlib
-# import io
-# import sys
-#
+
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 from pprint import pprint
 
@@ -352,6 +350,7 @@ class LCCP(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": UTD_data}
 
 
+# EMSL
 class MLWechat(Application):
     def __init__(self, request_date, cred_index='cred1'):
         super().__init__(request_date)
@@ -427,10 +426,13 @@ class MLWechat(Application):
             source_data = {"Content covered SE number": [(x[3], x[0]) for x in dt]}
             source_data['Content update number'] = [(x[3], x[1]) for x in dt]
             source_data['Touchpoint'] = [(x[3], x[2]) for x in dt]
-            return source_data
         except Exception as e:
-            print(str(e))
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            Application.print_error(self, error_msg=e, fname=fname, exc_tb_line=exc_tb.tb_lineno)
             return None
+        else:
+            return source_data
 
     def get_key_data(self, source_data, key_name):
         if source_data is None:
@@ -443,46 +445,58 @@ class MLWechat(Application):
         # request_utd_New_HCP_enrollment = [e[1] for e in source_data["New HCP enrollment"] if
         #                                   datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
         #                                                                                        "%Y%m")]
+        try:
+            request_ytd_Content_covered_SE_number = [e[1] for e in source_data["Content covered SE number"] if
+                                                     datetime.strptime(e[0], "%Y%m") <= datetime.strptime(
+                                                         self.request_date,
+                                                         "%Y%m") and
+                                                     datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+                                                         self.request_date,
+                                                         "%Y%m").year]
+            # request_utd_New_Patient_enrollment = [e[1] for e in source_data["New Patient enrollment"] if
+            #                                       datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+            #                                                                                            "%Y%m")]
 
-        request_ytd_Content_covered_SE_number = [e[1] for e in source_data["Content covered SE number"] if
-                                                 datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
-                                                                                                      "%Y%m") and
+            request_ytd_Content_update_number = [e[1] for e in source_data["Content update number"] if
+                                                 datetime.strptime(e[0], "%Y%m") <=
+                                                 datetime.strptime(self.request_date, "%Y%m") and
                                                  datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
-                                                     self.request_date,
-                                                     "%Y%m").year]
-        # request_utd_New_Patient_enrollment = [e[1] for e in source_data["New Patient enrollment"] if
-        #                                       datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
-        #                                                                                            "%Y%m")]
+                                                     self.request_date, "%Y%m").year]
 
-        request_ytd_Content_update_number = [e[1] for e in source_data["Content update number"] if
-                                             datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
-                                                                                                  "%Y%m") and
-                                             datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
-                                                 self.request_date,
-                                                 "%Y%m").year]
+            # request_utd_Patient_testing_record = [e[1] for e in source_data["Patient testing record"] if
+            #                                       datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+            #                                                                                            "%Y%m")]
 
-        # request_utd_Patient_testing_record = [e[1] for e in source_data["Patient testing record"] if
-        #                                       datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
-        #                                                                                            "%Y%m")]
+            request_ytd_Touchpoint = [e[1] for e in source_data["Touchpoint"] if
+                                      datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+                                                                                           "%Y%m") and
+                                      datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+                                          self.request_date,
+                                          "%Y%m").year]
 
-        request_ytd_Touchpoint = [e[1] for e in source_data["Touchpoint"] if
-                                  datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
-                                                                                       "%Y%m") and
-                                  datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
-                                      self.request_date,
-                                      "%Y%m").year]
+            YTD_data = [self.number_with_comma(sum(request_ytd_Content_covered_SE_number)),
+                        self.number_with_comma(sum(request_ytd_Content_update_number)),
+                        self.number_with_comma(sum(request_ytd_Touchpoint))]
+            MTD_data = [self.number_with_comma(request_ytd_Content_covered_SE_number[-1]),
+                        self.number_with_comma(request_ytd_Content_update_number[-1]),
+                        self.number_with_comma(request_ytd_Touchpoint[-1])]
+            # UTD_data = [self.number_with_comma(sum(request_utd_New_HCP_enrollment)),
+            #             self.number_with_comma(sum(request_utd_New_Patient_enrollment)),
+            #             self.number_with_comma(sum(request_utd_Patient_testing_record))]
+        except Exception as e:
+            exc_type, exc_obj, exc_tb = sys.exc_info()
+            fname = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+            Application.print_error(self, error_msg=e, fname=fname, exc_tb_line=exc_tb.tb_lineno)
+            return None
+        else:
+            return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
-        YTD_data = [self.number_with_comma(sum(request_ytd_Content_covered_SE_number)),
-                    self.number_with_comma(sum(request_ytd_Content_update_number)),
-                    self.number_with_comma(sum(request_ytd_Touchpoint))]
-        MTD_data = [self.number_with_comma(request_ytd_Content_covered_SE_number[-1]),
-                    self.number_with_comma(request_ytd_Content_update_number[-1]),
-                    self.number_with_comma(request_ytd_Touchpoint[-1])]
-        # UTD_data = [self.number_with_comma(sum(request_utd_New_HCP_enrollment)),
-        #             self.number_with_comma(sum(request_utd_New_Patient_enrollment)),
-        #             self.number_with_comma(sum(request_utd_Patient_testing_record))]
 
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+class MLWechat_xlsx(MLWechat, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "MLWechat"
 
 
 class RAPID(Application):
@@ -490,25 +504,6 @@ class RAPID(Application):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "RAPID"
-
-    # def load_source_file(self, source_file):
-    #     if source_file is None:
-    #         return None
-    #     try:
-    #         df = pd.read_excel(source_file, sheet_name=self.app, header=0, index_col=0)
-    #         source_date = {
-    #             k: sorted([(str(p)[:6], q) for p, q in v.items()], key=lambda e: datetime.strptime((e[0]), '%Y%m'),
-    #                       reverse=False)
-    #             for k, v in df.to_dict().items()}
-    #         return source_date
-    #     except Exception as e:
-    #         print(str(e))
-    #         return None
-    #
-    # def get_key_data(self, source_data, key_name):
-    #     if source_data is None:
-    #         return None
-    #     return source_data[key_name]
 
     def html_table_data(self, source_data):
         if source_data is None:
@@ -540,54 +535,66 @@ class RAPID(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
-class Chatbot_HR(Application):
+class Chatbot(Application):
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        request_ytd_Satisfactory_Number = [e[1] for e in source_data["Satisfactory Number"] if
+                                           datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+                                                                                                "%Y%m") and
+                                           datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+                                               self.request_date,
+                                               "%Y%m").year]
+        request_mtd_Satisfactory_Number = request_ytd_Satisfactory_Number[-1]
+
+        request_ytd_Not_Rate_Number = [e[1] for e in source_data["Not Rate Number"] if
+                                       datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+                                                                                            "%Y%m") and
+                                       datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+                                           self.request_date,
+                                           "%Y%m").year]
+        request_mtd_Not_Rate_Number = request_ytd_Not_Rate_Number[-1]
+
+        request_ytd_Unsatisfactory_Number = [e[1] for e in source_data["Unsatisfactory Number"] if
+                                             datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+                                                                                                  "%Y%m") and
+                                             datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+                                                 self.request_date,
+                                                 "%Y%m").year]
+        request_mtd_Unsatisfactory_Number = request_ytd_Unsatisfactory_Number[-1]
+
+        request_ytd_Conversation_Number = [e[1] for e in source_data["Conversation Number"] if
+                                           datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+                                                                                                "%Y%m") and
+                                           datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+                                               self.request_date,
+                                               "%Y%m").year]
+        request_mtd_Conversation_Number = request_ytd_Conversation_Number[-1]
+
+        request_ytd_Satisfaction_Rate = (sum(request_ytd_Satisfactory_Number) + sum(request_ytd_Not_Rate_Number)) \
+                                        / sum(request_ytd_Conversation_Number)
+        request_mtd_Satisfaction_Rate = \
+            list(filter(lambda e: e[0] == self.request_date, source_data["Satisfaction Rate"]))[0][1]
+
+        YTD_data = [self.number_with_comma(sum(request_ytd_Satisfactory_Number)),
+                    self.number_with_comma(sum(request_ytd_Not_Rate_Number)),
+                    self.number_with_comma(sum(request_ytd_Unsatisfactory_Number)),
+                    self.number_with_comma(sum(request_ytd_Conversation_Number)),
+                    f'{round(float(request_ytd_Satisfaction_Rate), 3) * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Satisfactory_Number),
+                    self.number_with_comma(request_mtd_Not_Rate_Number),
+                    self.number_with_comma(request_mtd_Unsatisfactory_Number),
+                    self.number_with_comma(request_mtd_Conversation_Number),
+                    f'{round(float(request_mtd_Satisfaction_Rate), 3) * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class Chatbot_HR(Chatbot, Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "Chatbot_HR"
-
-    # def load_source_file(self, source_file):
-    #     if source_file is None:
-    #         return None
-    #     try:
-    #         df = pd.read_excel(source_file, sheet_name=self.app, header=0, index_col=0)
-    #         source_date = {
-    #             k: sorted([(str(p)[:6], q) for p, q in v.items()], key=lambda ele: datetime.strptime((ele[0]), '%Y%m'),
-    #                       reverse=False)
-    #             for k, v in df.to_dict().items()}
-    #         return source_date
-    #     except Exception as e:
-    #         print(str(e))
-    #         return None
-
-    def html_table_data(self, source_data):
-        if source_data is None:
-            return None
-        request_ytd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
-        request_mtd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
-
-        request_ytd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Conversation Number(YTD)"]))[0][1]
-        request_mtd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
-
-        request_ytd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
-        request_mtd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
-
-        YTD_data = [self.number_with_comma(request_ytd_Active_User),
-                    self.number_with_comma(request_ytd_Conversation_Number),
-                    f'{request_ytd_Accuracy * 100}%']
-        MTD_data = [self.number_with_comma(request_mtd_Active_User),
-                    self.number_with_comma(request_mtd_Conversation_Number),
-                    f'{request_mtd_Accuracy * 100}%']
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
 class Chatbot_HCP(Application):
@@ -625,149 +632,35 @@ class Chatbot_HCP(Application):
 
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
-class Chatbot_MOE(Application):
+
+class Chatbot_MOE(Chatbot, Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "Chatbot_MOE"
 
-    def html_table_data(self, source_data):
-        if source_data is None:
-            return None
-        request_ytd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
-        request_mtd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
 
-        request_ytd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Conversation Number(YTD)"]))[0][1]
-        request_mtd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
-
-        request_ytd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
-        request_mtd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
-
-        YTD_data = [self.number_with_comma(request_ytd_Active_User),
-                    self.number_with_comma(request_ytd_Conversation_Number),
-                    f'{request_ytd_Accuracy * 100}%']
-        MTD_data = [self.number_with_comma(request_mtd_Active_User),
-                    self.number_with_comma(request_mtd_Conversation_Number),
-                    f'{request_mtd_Accuracy * 100}%']
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
-
-
-class Chatbot_SFE(Application):
+class Chatbot_SFE(Chatbot, Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "Chatbot_SFE"
 
-    def html_table_data(self, source_data):
-        if source_data is None:
-            return None
-        request_ytd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
-        request_mtd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
 
-        request_ytd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Conversation Number(YTD)"]))[0][1]
-        request_mtd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
-
-        request_ytd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
-        request_mtd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
-
-        YTD_data = [self.number_with_comma(request_ytd_Active_User),
-                    self.number_with_comma(request_ytd_Conversation_Number),
-                    f'{request_ytd_Accuracy * 100}%']
-        MTD_data = [self.number_with_comma(request_mtd_Active_User),
-                    self.number_with_comma(request_mtd_Conversation_Number),
-                    f'{request_mtd_Accuracy * 100}%']
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
-
-
-class Chatbot_LISHAN(Application):
+class Chatbot_LISHAN(Chatbot, Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "Chatbot_LISHAN"
 
-    def html_table_data(self, source_data):
-        if source_data is None:
-            return None
-        request_ytd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
-        request_mtd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
 
-        request_ytd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Conversation Number(YTD)"]))[0][1]
-        request_mtd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
-
-        request_ytd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
-        request_mtd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
-
-        YTD_data = [self.number_with_comma(request_ytd_Active_User),
-                    self.number_with_comma(request_ytd_Conversation_Number),
-                    f'{request_ytd_Accuracy * 100}%']
-        MTD_data = [self.number_with_comma(request_mtd_Active_User),
-                    self.number_with_comma(request_mtd_Conversation_Number),
-                    f'{request_mtd_Accuracy * 100}%']
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
-
-
-class Chatbot_FINANCE(Application):
+class Chatbot_FINANCE(Chatbot, Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "Chatbot_FINANCE"
-
-    def html_table_data(self, source_data):
-        if source_data is None:
-            return None
-        request_ytd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
-        request_mtd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
-
-        request_ytd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Conversation Number(YTD)"]))[0][1]
-        request_mtd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
-
-        request_ytd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
-        request_mtd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
-
-        YTD_data = [self.number_with_comma(request_ytd_Active_User),
-                    self.number_with_comma(request_ytd_Conversation_Number),
-                    f'{request_ytd_Accuracy * 100}%']
-        MTD_data = [self.number_with_comma(request_mtd_Active_User),
-                    self.number_with_comma(request_mtd_Conversation_Number),
-                    f'{request_mtd_Accuracy * 100}%']
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
 class Chatbot_LCCP(Application):
@@ -920,7 +813,7 @@ class WeChatEnt(Application):
 
 
 class WeChatEnt_xlsx(WeChatEnt, Application):
-    def __init__(self, request_date, cred_index='', app=''):
+    def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "WeChatEnt"
@@ -2040,6 +1933,18 @@ class LillyChina(Application):
                     self.number_with_comma(request_mtd_active_users[-1])]
 
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class LillyChina_xlsx(LillyChina, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "LillyChina"
+
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+        pass
 
 
 class BAW(Application):
