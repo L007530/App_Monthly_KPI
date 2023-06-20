@@ -1,14 +1,13 @@
 import argparse
 import json
-import os
 import sys
 from pprint import pprint
 
 import HTMLTable
 from application import Application
 
-
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
+import os
 
 
 def factory(classname):
@@ -25,6 +24,11 @@ ap.add_argument("-r", "--request_date", required=False,
 ap.add_argument("-x", "--xlsx", required=False,
                 help="source data excel file name in path sourceData")
 args = vars(ap.parse_args())
+
+# set http proxy
+os.environ['http_proxy'] = 'http://l007530:Sixthday=0911@pcnshan1-int.xh3.lilly.com:9000'
+# set https proxy
+os.environ['https_proxy'] = 'http://l007530:Sixthday=0911@pcnshan1-int.xh3.lilly.com:9000'
 
 if __name__ == '__main__':
 
@@ -134,7 +138,7 @@ if __name__ == '__main__':
                 trend_header_text = f'{instance.last_month_of(request_date)[0:4]}/{instance.last_month_of(request_date)[-2:]} - {request_date[0:4]}/{request_date[-2:]}</br>{keyDataName[0]} Trend '
             else:
                 key_data_len = len(list(filter(lambda d: d[0][0:4] == request_date[0:4], key_data)))
-                print(f"{key_data_len}")
+                # print(f"{key_data_len}")
                 trend_header_text = f'{instance.last_month_of(request_date)[0:4]}/{int(request_date[-2:]) - key_data_len + 1} - {request_date[0:4]}/{request_date[-2:]}</br>{keyDataName[0]} Trend '
                 # trend_header_text = f'{instance.last_month_of(request_date)[0:4]}/01 - {request_date[0:4]}/{request_date[-2:]}</br>{keyDataName[0]} Trend '
             trend_header = HTMLTable.TableCell(instance.to_div(trend_header_text, is_header=True),
@@ -175,10 +179,11 @@ if __name__ == '__main__':
                     name_row.append(HTMLTable.TableCell(instance.to_div(e, is_header=True), bgcolor='9CC2E5'))
                     data_row.append(instance.to_div(d))
 
-            header_row.append(
-                HTMLTable.TableCell(instance.to_div('Remarks / Comments', is_header=True),
-                                    attribs={'bgcolor': '9CC2E5', 'rowspan': 2}))
-            data_row.append(instance.to_div(' '))
+            # add Remarks / Comments row
+            # header_row.append(
+            #     HTMLTable.TableCell(instance.to_div('Remarks / Comments', is_header=True),
+            #                         attribs={'bgcolor': '9CC2E5', 'rowspan': 2}))
+            # data_row.append(instance.to_div(' '))
 
             t = HTMLTable.Table(header_row=header_row)
             t.rows.append(name_row)
