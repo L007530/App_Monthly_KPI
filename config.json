@@ -1,6 +1,6 @@
 {
-  "request date": "202301",
-  "xlsx sd": "China_apps_KPI_dashboard 2023 Jan.xlsx",
+  "request date": "202305",
+  "xlsx sd": "China_apps_KPI_dashboard 2023 May.xlsx",
   "apps to run": [
     "Chatbot_HCP"
   ],
@@ -10,7 +10,6 @@
     "iDoctor_rep",
     "iNurse",
     "LCCP",
-    "iPatient",
     "MLWechat",
     "RAPID",
     "Smart Sales Tool_SSR",
@@ -20,16 +19,18 @@
     "WeChatEnt",
     "AcronymBot",
     "Chatbot_HR",
-    "Chatbot_HCP",
     "Chatbot_MOE",
     "Chatbot_SFE",
     "Chatbot_LISHAN",
     "Chatbot_FINANCE",
+    "Chatbot_IT",
+    "Chatbot_Procurement",
+    "Chatbot_HCP",
     "Chatbot_LCCP",
-    "CHIEF",
     "CHIEF Cloud",
     "LillyChina",
     "LillyMedical",
+    "LillyMedical_MiniProgram",
     "Training Gamification",
     "BAW"
   ],
@@ -212,9 +213,9 @@
     },
     "MLWechat": {
       "class": "MLWechat",
-      "sd type": "db",
+      "sd type": "xlsx",
       "cred_index": "cred1",
-      "displayName": "eMSL (ML Wechat)",
+      "displayName": "eMSL ",
       "TA": "Lilly internal MSLs",
       "YTD": [
         "Content covered SE number",
@@ -382,31 +383,6 @@
       ],
       "launchFrom": ""
     },
-    "Chatbot_HR": {
-      "class": "Chatbot_HR",
-      "sd type": "xlsx",
-      "displayName": "Chatbot HR",
-      "TA": "Lilly Employee",
-      "YTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "MTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "UTD": [],
-      "keyData": [
-        "Conversation Number"
-      ],
-      "launchFrom": ""
-    },
     "Chatbot_HCP": {
       "class": "Chatbot_HCP",
       "sd type": "xlsx",
@@ -415,112 +391,16 @@
       "YTD": [
         "Active User",
         "Conversation Number",
-        "Accuracy (Only Count in Scope)"
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
-        "Accuracy (Only Count in Scope)"
-      ],
-      "UTD": [],
-      "keyData": [
-        "Conversation Number"
-      ],
-      "launchFrom": ""
-    },
-    "Chatbot_MOE": {
-      "class": "Chatbot_MOE",
-      "sd type": "xlsx",
-      "displayName": "Chatbot MOE (IT)",
-      "TA": "Lilly Employee",
-      "YTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "MTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "UTD": [],
-      "keyData": [
-        "Conversation Number"
-      ],
-      "launchFrom": ""
-    },
-    "Chatbot_SFE": {
-      "class": "Chatbot_SFE",
-      "sd type": "xlsx",
-      "displayName": "Chatbot SFE",
-      "TA": "Lilly Employee",
-      "YTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "MTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "UTD": [],
-      "keyData": [
-        "Conversation Number"
-      ],
-      "launchFrom": ""
-    },
-    "Chatbot_LISHAN": {
-      "class": "Chatbot_LISHAN",
-      "sd type": "xlsx",
-      "displayName": "Chatbot 礼膳",
-      "TA": "Lilly Employee",
-      "YTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "MTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "UTD": [],
-      "keyData": [
-        "Conversation Number"
-      ],
-      "launchFrom": ""
-    },
-    "Chatbot_FINANCE": {
-      "class": "Chatbot_FINANCE",
-      "sd type": "xlsx",
-      "displayName": "Chatbot FINANCE",
-      "TA": "Lilly Employee",
-      "YTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
-      ],
-      "MTD": [
-        "Satisfactory Number",
-        "Not Rate Number",
-        "Unsatisfactory Number",
-        "Conversation Number",
-        "Satisfaction Rate"
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
       ],
       "UTD": [],
       "keyData": [
@@ -549,9 +429,176 @@
       ],
       "launchFrom": ""
     },
-    "China Corporate Website": {
-      "class": "ChinaCorporateWebsite",
-      "sd type": "xlsx"
+    "Chatbot_HR": {
+      "class": "Chatbot_HR",
+      "sd type": "xlsx",
+      "displayName": "Chatbot HR",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot_MOE": {
+      "class": "Chatbot_MOE",
+      "sd type": "xlsx",
+      "displayName": "Chatbot MOE (IT)",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot_SFE": {
+      "class": "Chatbot_SFE",
+      "sd type": "xlsx",
+      "displayName": "Chatbot SFE",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot_LISHAN": {
+      "class": "Chatbot_LISHAN",
+      "sd type": "xlsx",
+      "displayName": "Chatbot 礼膳",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot_FINANCE": {
+      "class": "Chatbot_FINANCE",
+      "sd type": "xlsx",
+      "displayName": "Chatbot FINANCE",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot_IT": {
+      "class": "Chatbot_IT",
+      "sd type": "xlsx",
+      "displayName": "Chatbot IT",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Reply Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
+    },
+    "Chatbot_Procurement": {
+      "class": "Chatbot_Procurement",
+      "sd type": "xlsx",
+      "displayName": "Chatbot Procurement",
+      "TA": "Lilly Employee",
+      "YTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate"
+      ],
+      "MTD": [
+        "Active User",
+        "Conversation Number",
+        "Satisfaction Rate"
+      ],
+      "UTD": [],
+      "keyData": [
+        "Conversation Number"
+      ],
+      "launchFrom": ""
     },
     "LillyMedical": {
       "class": "LillyMedical",
@@ -574,6 +621,28 @@
         "Total page visit"
       ],
       "launchFrom": "Mar 2020"
+    },
+    "LillyMedical_MiniProgram": {
+      "class": "LillyMedical_MiniProgram",
+      "sd type": "xlsx",
+      "displayName": "Lillymedical MiniProgram",
+      "TA": "HCPs",
+      "YTD": [
+        "Total page visit",
+        "FAQ page visit"
+      ],
+      "MTD": [
+        "Total page visit",
+        "FAQ page visit"
+      ],
+      "UTD": [
+        "Total page visit",
+        "FAQ page visit"
+      ],
+      "keyData": [
+        "Total page visit"
+      ],
+      "launchFrom": "Mar 2023"
     },
     "Training Gamification": {
       "class": "TrainingGamification",
