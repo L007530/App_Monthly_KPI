@@ -350,7 +350,7 @@ class LCCP(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": UTD_data}
 
 
-# EMSL
+# EMSL current
 class MLWechat(Application):
     def __init__(self, request_date, cred_index='cred1'):
         super().__init__(request_date)
@@ -535,7 +535,7 @@ class RAPID(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
-class Chatbot(Application):
+class Chatbot_Abandoned(Application):
     def html_table_data(self, source_data):
         if source_data is None:
             return None
@@ -590,77 +590,102 @@ class Chatbot(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
-class Chatbot_HR(Chatbot, Application):
-    def __init__(self, request_date, cred_index=''):
-        super().__init__(request_date)
-        self.cred_index = cred_index
-        self.app = "Chatbot_HR"
+class Chatbot(Application):
+    def html_table_data(self, source_data):
+        if source_data is None:
+            return None
+
+        request_ytd_Active_User = [e[1] for e in source_data["Active User(YTD)"] if
+                                   datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                       self.request_date,
+                                       "%Y%m")]
+        request_mtd_Active_User = [e[1] for e in source_data["Active User"] if
+                                   datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                       self.request_date,
+                                       "%Y%m")]
+
+        request_ytd_Conversation_Number = [e[1] for e in source_data["Conversation Number(YTD)"] if
+                                           datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                               self.request_date,
+                                               "%Y%m")]
+        request_mtd_Conversation_Number = [e[1] for e in source_data["Conversation Number"] if
+                                           datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                               self.request_date,
+                                               "%Y%m")]
+
+        request_ytd_Satisfaction_Rate = [e[1] for e in source_data["Satisfaction Rate(YTD)"] if
+                                         datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                             self.request_date,
+                                             "%Y%m")]
+        request_mtd_Satisfaction_Rate = [e[1] for e in source_data["Satisfaction Rate"] if
+                                         datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                             self.request_date,
+                                             "%Y%m")]
+        request_ytd_Accuracy_Rate = [e[1] for e in source_data["Accuracy Rate(YTD)"] if
+                                     datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                         self.request_date,
+                                         "%Y%m")]
+        request_mtd_Accuracy_Rate = [e[1] for e in source_data["Accuracy Rate"] if
+                                     datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                         self.request_date,
+                                         "%Y%m")]
+        request_ytd_Reply_Rate = [e[1] for e in source_data["Reply Rate(YTD)"] if
+                                  datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                      self.request_date,
+                                      "%Y%m")]
+        request_mtd_Reply_Rate = [e[1] for e in source_data["Reply Rate"] if
+                                  datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                      self.request_date,
+                                      "%Y%m")]
+
+        YTD_data = [self.number_with_comma(request_ytd_Active_User[-1]),
+                    self.number_with_comma(request_ytd_Conversation_Number[-1]),
+                    f'{round(float(request_ytd_Satisfaction_Rate[-1]), 3) * 100}%',
+                    f'{round(float(request_ytd_Accuracy_Rate[-1]), 3) * 100}%',
+                    f'{round(float(request_ytd_Reply_Rate[-1]), 3) * 100}%']
+        MTD_data = [self.number_with_comma(request_mtd_Active_User[-1]),
+                    self.number_with_comma(request_mtd_Conversation_Number[-1]),
+                    f'{round(float(request_mtd_Satisfaction_Rate[-1]), 3) * 100}%',
+                    f'{round(float(request_mtd_Accuracy_Rate[-1]), 3) * 100}%',
+                    f'{round(float(request_mtd_Reply_Rate[-1]), 3) * 100}%']
+
+        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
-class Chatbot_HCP(Application):
+class Chatbot_HCP(Chatbot, Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.app = "Chatbot_HCP"
 
-    def html_table_data(self, source_data):
-        if source_data is None:
-            return None
-        request_ytd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
-        request_mtd_Active_User = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
-
-        request_ytd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Conversation Number(YTD)"]))[0][1]
-        request_mtd_Conversation_Number = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
-
-        request_ytd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date,
-                        source_data["Accuracy (Only Count in Scope)(YTD)"]))[0][1]
-        request_mtd_Accuracy = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Accuracy (Only Count in Scope)"]))[0][1]
-
-        YTD_data = [self.number_with_comma(request_ytd_Active_User),
-                    self.number_with_comma(request_ytd_Conversation_Number),
-                    f'{request_ytd_Accuracy * 100}%']
-        MTD_data = [self.number_with_comma(request_mtd_Active_User),
-                    self.number_with_comma(request_mtd_Conversation_Number),
-                    f'{request_mtd_Accuracy * 100}%']
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
-
-
-class Chatbot_MOE(Chatbot, Application):
-    def __init__(self, request_date, cred_index=''):
-        super().__init__(request_date)
-        self.cred_index = cred_index
-        self.app = "Chatbot_MOE"
-
-
-class Chatbot_SFE(Chatbot, Application):
-    def __init__(self, request_date, cred_index=''):
-        super().__init__(request_date)
-        self.cred_index = cred_index
-        self.app = "Chatbot_SFE"
-
-
-class Chatbot_LISHAN(Chatbot, Application):
-    def __init__(self, request_date, cred_index=''):
-        super().__init__(request_date)
-        self.cred_index = cred_index
-        self.app = "Chatbot_LISHAN"
-
-
-class Chatbot_FINANCE(Chatbot, Application):
-    def __init__(self, request_date, cred_index=''):
-        super().__init__(request_date)
-        self.cred_index = cred_index
-        self.app = "Chatbot_FINANCE"
+    # def html_table_data(self, source_data):
+    #     if source_data is None:
+    #         return None
+    #     request_ytd_Active_User = \
+    #         list(filter(lambda e: e[0] == self.request_date, source_data["Active User(YTD)"]))[0][1]
+    #     request_mtd_Active_User = \
+    #         list(filter(lambda e: e[0] == self.request_date, source_data["Active User"]))[0][1]
+    #
+    #     request_ytd_Conversation_Number = \
+    #         list(filter(lambda e: e[0] == self.request_date,
+    #                     source_data["Conversation Number(YTD)"]))[0][1]
+    #     request_mtd_Conversation_Number = \
+    #         list(filter(lambda e: e[0] == self.request_date, source_data["Conversation Number"]))[0][1]
+    #
+    #     request_ytd_Satisfaction_Rate = \
+    #         list(filter(lambda e: e[0] == self.request_date,
+    #                     source_data["Satisfaction Rate(YTD)"]))[0][1]
+    #     request_mtd_Satisfaction_Rate = \
+    #         list(filter(lambda e: e[0] == self.request_date, source_data["Satisfaction Rate"]))[0][1]
+    #
+    #     YTD_data = [self.number_with_comma(request_ytd_Active_User),
+    #                 self.number_with_comma(request_ytd_Conversation_Number),
+    #                 f'{request_ytd_Satisfaction_Rate * 100}%']
+    #     MTD_data = [self.number_with_comma(request_mtd_Active_User),
+    #                 self.number_with_comma(request_mtd_Conversation_Number),
+    #                 f'{request_mtd_Satisfaction_Rate * 100}%']
+    #
+    #     return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
 class Chatbot_LCCP(Application):
@@ -697,6 +722,55 @@ class Chatbot_LCCP(Application):
                     f'{request_mtd_Accuracy * 100}%']
 
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+
+
+class Chatbot_HR(Chatbot, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_HR"
+
+
+class Chatbot_MOE(Chatbot, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_MOE"
+
+
+class Chatbot_SFE(Chatbot, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_SFE"
+
+
+class Chatbot_LISHAN(Chatbot, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_LISHAN"
+
+
+class Chatbot_FINANCE(Chatbot, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_FINANCE"
+
+
+class Chatbot_IT(Chatbot, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_IT"
+
+
+class Chatbot_Procurement(Chatbot, Application):
+    def __init__(self, request_date, cred_index=''):
+        super().__init__(request_date)
+        self.cred_index = cred_index
+        self.app = "Chatbot_Procurement"
 
 
 class WeChatEnt(Application):
@@ -1043,44 +1117,51 @@ class LillyMedical(Application):
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": UTD_data}
 
 
-class Chief(Application):
+class LillyMedical_MiniProgram(LillyMedical, Application):
     def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
-        self.app = "CHIEF"
+        self.app = "LillyMedical_MiniProgram"
 
-    def html_table_data(self, source_data):
-        if source_data is None:
-            return None
-        request_ytd_Forms = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Forms"]))[0][1]
-        request_mtd_Forms = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Forms"]))[0][1]
 
-        request_ytd_Submit_records = [e[1] for e in source_data["Submit records"] if
-                                      datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
-                                                                                           "%Y%m") and
-                                      datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
-                                          self.request_date, "%Y%m").year]
-        request_mtd_Submit_records = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Submit records"]))[0][1]
-
-        request_ytd_Approval_records = [e[1] for e in source_data["Approval records"] if
-                                        datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
-                                                                                             "%Y%m") and
-                                        datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
-                                            self.request_date, "%Y%m").year]
-        request_mtd_Approval_records = \
-            list(filter(lambda e: e[0] == self.request_date, source_data["Approval records"]))[0][1]
-
-        YTD_data = [self.number_with_comma(request_ytd_Forms),
-                    self.number_with_comma(sum(request_ytd_Submit_records)),
-                    self.number_with_comma(sum(request_ytd_Approval_records))]
-        MTD_data = [self.number_with_comma(request_mtd_Forms),
-                    self.number_with_comma(request_mtd_Submit_records),
-                    self.number_with_comma(request_mtd_Approval_records)]
-
-        return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
+# class Chief(Application):
+#     def __init__(self, request_date, cred_index=''):
+#         super().__init__(request_date)
+#         self.cred_index = cred_index
+#         self.app = "CHIEF"
+#
+#     def html_table_data(self, source_data):
+#         if source_data is None:
+#             return None
+#         request_ytd_Forms = \
+#             list(filter(lambda e: e[0] == self.request_date, source_data["Forms"]))[0][1]
+#         request_mtd_Forms = \
+#             list(filter(lambda e: e[0] == self.request_date, source_data["Forms"]))[0][1]
+#
+#         request_ytd_Submit_records = [e[1] for e in source_data["Submit records"] if
+#                                       datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+#                                                                                            "%Y%m") and
+#                                       datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+#                                           self.request_date, "%Y%m").year]
+#         request_mtd_Submit_records = \
+#             list(filter(lambda e: e[0] == self.request_date, source_data["Submit records"]))[0][1]
+#
+#         request_ytd_Approval_records = [e[1] for e in source_data["Approval records"] if
+#                                         datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date,
+#                                                                                              "%Y%m") and
+#                                         datetime.strptime(e[0], "%Y%m").year == datetime.strptime(
+#                                             self.request_date, "%Y%m").year]
+#         request_mtd_Approval_records = \
+#             list(filter(lambda e: e[0] == self.request_date, source_data["Approval records"]))[0][1]
+#
+#         YTD_data = [self.number_with_comma(request_ytd_Forms),
+#                     self.number_with_comma(sum(request_ytd_Submit_records)),
+#                     self.number_with_comma(sum(request_ytd_Approval_records))]
+#         MTD_data = [self.number_with_comma(request_mtd_Forms),
+#                     self.number_with_comma(request_mtd_Submit_records),
+#                     self.number_with_comma(request_mtd_Approval_records)]
+#
+#         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": []}
 
 
 class ChiefCloud(Application):
