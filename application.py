@@ -4,8 +4,6 @@ import os
 from datetime import datetime, date
 from collections import defaultdict
 
-import pathlib
-
 # sys.stdout = io.TextIOWrapper(sys.stdout.buffer, encoding='utf8')
 from pprint import pprint
 
@@ -29,15 +27,34 @@ class Application:
                 # print(f"[FileNotFoundError] Cannot find '{name}' under '{path}'")
                 return None
 
+    # @staticmethod
+    # def get_abs_path(file):
+    #     return str(pathlib.Path(file).parent.absolute())
+    #     # return os.path.dirname(os.path.abspath(file))
+
     @staticmethod
-    def get_abs_path(file):
-        return str(pathlib.Path(file).parent.absolute())
-        # return os.path.dirname(os.path.abspath(file))
+    def get_absolute_path(file_path):
+        """
+        This function takes a file path as input and returns its absolute path.
+
+        :param file_path: The path of the file (string)
+        :return: The absolute path of the file (string)
+        """
+        # Get the absolute path of the file
+        absolute_path = f"{os.path.abspath(file_path)}"
+
+        # Return the absolute path
+        return absolute_path
+
+    @staticmethod
+    def create_path(*args):
+        return os.path.join(*args)
 
     @staticmethod
     def prepend_to_html(title, prepend_data, filename, path='output'):
         # html=find_file(name, path)
-        with open(f"{path}\\{filename}", 'r+') as f:
+        # with open(f"{path}\\{filename}", 'r+') as f:
+        with open(Application.create_path(path, f"{filename}"), 'r+') as f:
             content = f.read()
             f.seek(0, 0)
             f.write(Application.to_html_tag(title, tag='div', attribs={
@@ -46,7 +63,8 @@ class Application:
 
     def html_output(self, app, html_data, ext_info=None, filename='HTML App Monthly report',
                     path='output'):
-        with open(f"{path}\\{filename}_{self.request_date}.html", "a") as html:
+        # with open(f"{path}\\{filename}_{self.request_date}.html", "a") as html:
+        with open(Application.create_path(path, f"{filename}_{self.request_date}.html"), "a") as html:
             html.writelines(
                 Application.to_html_tag('&#10146;' + app, attribs={
                     'style': 'font-size:17px;font-weight:bold;margin-bottom:10px;margin-top:20px'}))
@@ -137,12 +155,19 @@ class Application:
                 plt.axis('off')
                 figure = plt.gcf()
                 figure.set_size_inches(24, 3)
-                img_path = f"output\\trending"
+                # img_path = f"output\\trending"
+                img_path = Application.create_path("output", "trending")
                 Application.create_dir_if_not_exist(img_path)
                 img_name = f"{app}_{self.request_date}.png"
-                img_path_re = f"trending\\{img_name}"
-                plt.savefig(f"{img_path}\\{img_name}", dpi=100, bbox_inches='tight')
-                percentage = (y[-1] / y[-2] - 1) * 100
+                # img_path_re = f"trending\\{img_name}"
+                img_path_re = Application.create_path("trending", f"{img_name}")
+                # plt.savefig(f"{img_path}\\{img_name}", dpi=100, bbox_inches='tight')
+                plt.savefig(Application.create_path(img_path, img_name), dpi=100, bbox_inches='tight')
+
+                if y[-2] == 0:
+                    percentage = 0
+                else:
+                    percentage = (y[-1] / y[-2] - 1) * 100
                 plt.clf()
                 return round(percentage, 2), img_path_re
             else:
@@ -160,12 +185,19 @@ class Application:
                 plt.axis('off')
                 figure = plt.gcf()
                 figure.set_size_inches(24, 3)
-                img_path = f"output\\trending"
+                # img_path = f"output\\trending"
+                img_path = Application.create_path("output", "trending")
                 Application.create_dir_if_not_exist(img_path)
                 img_name = f"{app}_{self.request_date}.png"
-                img_path_re = f"trending\\{img_name}"
+                # img_path_re = f"trending\\{img_name}"
+                img_path_re = Application.create_path("trending", f"{img_name}")
                 plt.savefig(f"{img_path}\\{img_name}", dpi=100, bbox_inches='tight')
-                percentage = (y[-1] / y[-2] - 1) * 100
+                plt.savefig(Application.create_path(f"{img_path}", f"{img_name}"), dpi=100, bbox_inches='tight')
+
+                if y[-2] == 0:
+                    percentage = 100
+                else:
+                    percentage = (y[-1] / y[-2] - 1) * 100
                 plt.clf()
                 return round(percentage, 2), img_path_re
         except Exception as e:
@@ -202,56 +234,61 @@ class Application:
 
 
 class EOrdering(Application):
-    def __init__(self, request_date, cred_index='cred1'):
+    # def __init__(self, request_date, cred_index='cred3'):
+    #     super().__init__(request_date)
+    #     self.cred_index = cred_index
+    #     self.svr_name = 'GH3DMZDBPHA.xh3.lilly.com,1433'
+    #     self.db_name = 'eOrdering'
+    #     self.UID = Application.load_user_creds('creds.json', cred_index=cred_index)['UID']
+    #     self.pwd = Application.load_user_creds('creds.json', cred_index=cred_index)['pwd']
+
+    def __init__(self, request_date, cred_index=''):
         super().__init__(request_date)
         self.cred_index = cred_index
-        self.svr_name = 'GH3DMZDBPHA.xh3.lilly.com,1433'
-        self.db_name = 'EORDERING'
-        self.UID = Application.load_user_creds('creds.json', cred_index=cred_index)['UID']
-        self.pwd = Application.load_user_creds('creds.json', cred_index=cred_index)['pwd']
+        self.app = "eOrdering"
 
-    def load_source_data(self):
-        sql_order = '''
-                SELECT  
-                concat(datepart(yyyy, [request_date]), datepart(mm, [request_date])) as 'request_month',
-                COUNT(id) as 'orders_number'
-                FROM [e_order_app].[app_form_instance] 
-                where [is_deleted]=0 and [status] <> -99
-                group by concat(datepart(yyyy, [request_date]), datepart(mm, [request_date]))
-            '''
-        sql_vendor = '''
-                        select count([id]) from [e_order_sys].[sys_user] where [is_deleted]=0 and [vendor_code] is not null and [vendor_code]<>''
-                        '''
-        try:
-            conn = pyodbc.connect('Driver={SQL Server};'
-                                  f'Server={self.svr_name};'
-                                  f'Database={self.db_name};'
-                                  f'UID={self.UID};'
-                                  f'PWD={self.pwd};'
-                                  f'Trusted_Connection=no;'
-                                  f'timeout={self.db_conn_timeout};')
-            conn.timeout = int(self.db_conn_timeout)
-            cursor = conn.cursor()
-            cursor.execute(sql_order)
-            orders_number = [d for d in cursor]
-            orders_number.sort(key=lambda date: datetime.strptime(date[0], "%Y%m"))
-            source_data = {"Orders number": orders_number}
-
-            cursor.execute(sql_vendor)
-            source_data["Total vendor number"] = [d for d in cursor][0][0]
-
-            max_date_of_source_data = source_data["Orders number"][-1][0]
-            min_date_of_source_data = source_data["Orders number"][0][0]
-            if datetime.strptime(max_date_of_source_data, "%Y%m") < datetime.strptime(self.request_date, "%Y%m"):
-                raise Exception(
-                    f"[ERROR]Request date must be (<=) equal to or earlier than: {max_date_of_source_data}")
-            elif datetime.strptime(min_date_of_source_data, "%Y%m") > datetime.strptime(self.request_date, "%Y%m"):
-                raise Exception(
-                    f"[ERROR]Request date must be (>=) equal to or later than: {min_date_of_source_data}")
-            return source_data
-        except Exception as e:
-            print(str(e))
-            return None
+    # def load_source_data(self):
+    #     sql_order = '''
+    #             SELECT
+    #             concat(datepart(yyyy, [request_date]), datepart(mm, [request_date])) as 'request_month',
+    #             COUNT(id) as 'orders_number'
+    #             FROM [e_order_app].[app_form_instance]
+    #             where [is_deleted]=0 and [status] <> -99
+    #             group by concat(datepart(yyyy, [request_date]), datepart(mm, [request_date]))
+    #         '''
+    #     sql_vendor = '''
+    #                     select count([id]) from [e_order_sys].[sys_user] where [is_deleted]=0 and [vendor_code] is not null and [vendor_code]<>''
+    #                     '''
+    #     try:
+    #         conn = pyodbc.connect('Driver={SQL Server};'
+    #                               f'Server={self.svr_name};'
+    #                               f'Database={self.db_name};'
+    #                               f'UID={self.UID};'
+    #                               f'PWD={self.pwd};'
+    #                               f'Trusted_Connection=no;'
+    #                               f'timeout={self.db_conn_timeout};')
+    #         conn.timeout = int(self.db_conn_timeout)
+    #         cursor = conn.cursor()
+    #         cursor.execute(sql_order)
+    #         orders_number = [d for d in cursor]
+    #         orders_number.sort(key=lambda date: datetime.strptime(date[0], "%Y%m"))
+    #         source_data = {"Orders number": orders_number}
+    #
+    #         cursor.execute(sql_vendor)
+    #         source_data["Total vendor number"] = [d for d in cursor][0][0]
+    #
+    #         max_date_of_source_data = source_data["Orders number"][-1][0]
+    #         min_date_of_source_data = source_data["Orders number"][0][0]
+    #         if datetime.strptime(max_date_of_source_data, "%Y%m") < datetime.strptime(self.request_date, "%Y%m"):
+    #             raise Exception(
+    #                 f"[ERROR]Request date must be (<=) equal to or earlier than: {max_date_of_source_data}")
+    #         elif datetime.strptime(min_date_of_source_data, "%Y%m") > datetime.strptime(self.request_date, "%Y%m"):
+    #             raise Exception(
+    #                 f"[ERROR]Request date must be (>=) equal to or later than: {min_date_of_source_data}")
+    #         return source_data
+    #     except Exception as e:
+    #         print(str(e))
+    #         return None
 
     # def get_key_data(self, source_data, key_name):
     #     if source_data is None:
@@ -262,17 +299,30 @@ class EOrdering(Application):
     def html_table_data(self, source_data):
         if source_data is None:
             return None
-        request_utd_source_data = [e[1] for e in source_data["Orders number"] if
-                                   datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date, "%Y%m")]
 
-        request_ytd_source_data = [e[1] for e in source_data["Orders number"] if
-                                   datetime.strptime(e[0], "%Y%m") <= datetime.strptime(self.request_date, "%Y%m") and
-                                   datetime.strptime(e[0], "%Y%m").year == datetime.strptime(self.request_date,
-                                                                                             "%Y%m").year]
-        total_vendor_number = self.number_with_comma(source_data['Total vendor number'])
-        YTD_data = [total_vendor_number, self.number_with_comma(sum(request_ytd_source_data))]
-        MTD_data = [total_vendor_number, self.number_with_comma(request_ytd_source_data[-1])]
-        UTD_data = [total_vendor_number, self.number_with_comma(sum(request_utd_source_data))]
+        request_mtd_source_data = [e[1] for e in source_data["Orders number"] if
+                                   datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                       self.request_date,
+                                       "%Y%m")]
+
+        request_utd_source_data = [e[1] for e in source_data["Orders number (UTD)"] if
+                                   datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                       self.request_date,
+                                       "%Y%m")]
+
+        request_ytd_source_data = [e[1] for e in source_data["Orders number (YTD)"] if
+                                   datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                       self.request_date,
+                                       "%Y%m")]
+
+        total_vendor_number = [e[1] for e in source_data["Total vendor number"] if
+                               datetime.strptime(e[0], "%Y%m") == datetime.strptime(
+                                   self.request_date,
+                                   "%Y%m")]
+
+        YTD_data = [self.number_with_comma(total_vendor_number[0]), self.number_with_comma(request_ytd_source_data[0])]
+        MTD_data = [self.number_with_comma(total_vendor_number[0]), self.number_with_comma(request_mtd_source_data[0])]
+        UTD_data = [self.number_with_comma(total_vendor_number[0]), self.number_with_comma(request_utd_source_data[0])]
 
         return {"YTD_data": YTD_data, "MTD_data": MTD_data, "UTD_data": UTD_data}
 
@@ -774,7 +824,7 @@ class Chatbot_Procurement(Chatbot, Application):
 
 
 class WeChatEnt(Application):
-    def __init__(self, request_date, cred_index='cred1'):
+    def __init__(self, request_date, cred_index='cred2'):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.svr_name = 'GH3DMZDBPHA.xh3.lilly.com,1433'
@@ -1369,7 +1419,7 @@ class SmartSalesToolSSR(Application):
         super().__init__(request_date)
         self.cred_index = cred_index
         # self.svr_name = 'GH3SQLDBPRD1' # SQL 2012
-        self.svr_name = 'GH3SQLDBPRD1\SQL2016'  # SQL 2016
+        self.svr_name = 'GH3SQLDBPRD1\PRD2022'  # SQL 2016
 
     def load_source_data(self):
         sql_touchpoint = f'''
@@ -1475,7 +1525,7 @@ class SmartSalesToolSDF(Application):
         super().__init__(request_date)
         self.cred_index = cred_index
         # self.svr_name = 'GH3SQLDBPRD1' # SQL 2012
-        self.svr_name = 'GH3SQLDBPRD1\SQL2016'  # SQL 2016
+        self.svr_name = 'GH3SQLDBPRD1\PRD2022'  # SQL 2016
 
     def load_source_data(self):
         sql_touchpoint = f'''
@@ -1578,7 +1628,7 @@ class SmartSalesToolSDF(Application):
 
 
 class TrainingGamification(Application):
-    def __init__(self, request_date, cred_index='cred1'):
+    def __init__(self, request_date, cred_index='cred2'):
         super().__init__(request_date)
         self.cred_index = cred_index
         self.svr_name = 'GH3DMZDBPHA.XH3.LILLY.COM,1433'
