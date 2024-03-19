@@ -1,22 +1,14 @@
 {
-  "request date": "202305",
-  "xlsx sd": "China_apps_KPI_dashboard 2023 May.xlsx",
+  "request date": "202401",
+  "xlsx sd": "China_apps_KPI_dashboard 2024 Jan.xlsx",
   "apps to run": [
-    "Chatbot_HCP"
+    "eOrdering"
   ],
   "=====================================DO NOT CHANGE BELOW CONFIG ": "==============================================",
   "applications": [
-    "iDoctor",
-    "iDoctor_rep",
-    "iNurse",
     "LCCP",
-    "MLWechat",
     "RAPID",
-    "Smart Sales Tool_SSR",
-    "Smart Sales Tool_SDF",
-    "Coterie",
     "eOrdering",
-    "WeChatEnt",
     "AcronymBot",
     "Chatbot_HR",
     "Chatbot_MOE",
@@ -27,10 +19,6 @@
     "Chatbot_Procurement",
     "Chatbot_HCP",
     "Chatbot_LCCP",
-    "CHIEF Cloud",
-    "LillyChina",
-    "LillyMedical",
-    "LillyMedical_MiniProgram",
     "Training Gamification",
     "BAW"
   ],
@@ -319,21 +307,21 @@
     },
     "eOrdering": {
       "class": "EOrdering",
-      "sd type": "db",
-      "cred_index": "cred1",
+      "sd type": "xlsx",
+      "cred_index": "cred2",
       "displayName": "eOrdering",
       "TA": "Commercial, Vendors",
       "YTD": [
-        "Total vendor number",
-        "Orders number"
+        "Total vendor number (MTD)",
+        "Orders number (MTD)"
       ],
       "MTD": [
         "Total vendor number",
         "Orders number"
       ],
       "UTD": [
-        "Total vendor number",
-        "Orders number"
+        "Total vendor number (UTD)",
+        "Orders number (UTD)"
       ],
       "keyData": [
         "Orders number"
@@ -343,7 +331,7 @@
     "WeChatEnt": {
       "class": "WeChatEnt",
       "sd type": "db",
-      "cred_index": "cred1",
+      "cred_index": "cred2",
       "displayName": "WeChat Ent",
       "TA": "Lilly Employee",
       "YTD": [
@@ -393,14 +381,14 @@
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -439,14 +427,14 @@
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -464,14 +452,14 @@
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -489,14 +477,14 @@
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -514,14 +502,14 @@
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -539,14 +527,14 @@
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -564,14 +552,14 @@
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
         "Satisfaction Rate",
         "Accuracy Rate",
-        "Reply Rate"
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -587,12 +575,16 @@
       "YTD": [
         "Active User",
         "Conversation Number",
-        "Satisfaction Rate"
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Answered by Chatbot"
       ],
       "MTD": [
         "Active User",
         "Conversation Number",
-        "Satisfaction Rate"
+        "Satisfaction Rate",
+        "Accuracy Rate",
+        "Answered by Chatbot"
       ],
       "UTD": [],
       "keyData": [
@@ -647,7 +639,7 @@
     "Training Gamification": {
       "class": "TrainingGamification",
       "sd type": "db",
-      "cred_index": "cred1",
+      "cred_index": "cred2",
       "displayName": "Sales Force Training Gamification",
       "TA": "Lilly Sales Reps, DMs",
       "YTD": [
